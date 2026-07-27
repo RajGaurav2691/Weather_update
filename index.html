@@ -1,0 +1,222 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Weather</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+  <div class="container">
+    <div class="weather-input">
+      <div class="input group">
+        <input type="text" id="userlocation" placeholder="Enter City Name" />
+        <select class="converter" id="converter">
+          <option>℃</option>
+          <option>℉</option>
+        </select>
+
+        <i class="fa fa-search" onclick="findUserLocation()"></i>
+      </div>
+      <div class="weather-icon"></div>
+      <h2 class="temperature"></h2>
+      <div class="feelslike"></div>
+      <div class="description"></div>
+      <hr />
+      <div class="date"></div>
+      <div class="city"></div>
+    </div>
+
+    <div class="weather-output">
+      <h2 class="" heading>Today's Highlights</h2>
+      <div class="Highlights">
+        <div class="humidity">
+          humidity
+          <i class="fa-solid fa-water"></i>
+          <h1 id="Hvalue"></h1>
+        </div>
+
+
+        <div class="wind-speed">
+          Wind Speed
+          <i class="fa-solid fa-wind"></i>
+          <h1 id="Wvalue"></h1>
+        </div>
+
+        <div class="sun">
+          <span>
+            <i class="fa-solid fa-sun"></i>
+            <p><span id="SRValue"></span>Sunrise</p>
+          </span>
+          <span>
+            <i class="fa-regular fa-sun"></i>
+            <p><span id="SSValue"></span>Sunset</p>
+          </span>
+        </div>
+
+        <div class="clouds">
+          Clouds
+          <i class="fa-solid fa-cloud"></i>
+          <h1 id="Cvalue"></h1>
+        </div>
+
+        <div class="uv-index">
+          UV Index
+          <i class="fa-solid fa-bacon"></i>
+          <h1 id="UVvalue"></h1>
+        </div>
+
+        <div class="pressure">
+          Pressure
+          <i class="fa-solid fa-volcano"></i>
+          <h1 id="Pvalue"></h1>
+        </div>
+      </div>
+      <br >
+
+      <h2 class="heading">This week</h2>
+      <div class="forcast"></div>
+    </div>
+  </div>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Weather</title>
+  <meta name="description" content="Check current conditions and a 5-day forecast for any city." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <!-- config.js must load before script.js: it defines CONFIG.OPENWEATHER_API_KEY -->
+  <script defer src="config.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#weather-output">Skip to weather details</a>
+
+  <div class="app">
+    <!-- NOW: current conditions -->
+    <section class="now-panel" aria-label="Current weather">
+      <div class="horizon" aria-hidden="true">
+        <div class="horizon__glow"></div>
+        <div class="horizon__cloud horizon__cloud--a"></div>
+        <div class="horizon__cloud horizon__cloud--b"></div>
+      </div>
+
+      <form class="search" role="search" novalidate>
+        <label class="sr-only" for="city-input">City name</label>
+        <input
+          type="text"
+          id="city-input"
+          name="city"
+          placeholder="Search for a city…"
+          autocomplete="off"
+          aria-describedby="search-status"
+        />
+
+        <label class="sr-only" for="unit-select">Temperature unit</label>
+        <select id="unit-select" class="unit-select" aria-label="Temperature unit">
+          <option value="C" selected>°C</option>
+          <option value="F">°F</option>
+        </select>
+
+        <button type="submit" class="search__button" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        </button>
+      </form>
+
+      <p id="search-status" class="search-status" role="status" aria-live="polite"></p>
+
+      <div class="now-panel__body" hidden>
+        <img class="weather-icon" src="" alt="" width="120" height="120" />
+
+        <h1 class="temperature"><span class="temperature__value">--</span><span class="temperature__unit">°C</span></h1>
+        <p class="feels-like"></p>
+        <p class="conditions"></p>
+
+        <hr />
+
+        <p class="date"></p>
+        <p class="location"></p>
+      </div>
+    </section>
+
+    <!-- DETAILS: highlights + forecast -->
+    <main id="weather-output" class="weather-output">
+      <h2 class="section-heading">Today's highlights</h2>
+
+      <ul class="highlights" aria-label="Today's highlight metrics">
+        <li class="highlight-card">
+          <i class="fa-solid fa-droplet" aria-hidden="true"></i>
+          <p class="highlight-card__label">Humidity</p>
+          <p class="highlight-card__value" id="humidity-value">--</p>
+        </li>
+
+        <li class="highlight-card">
+          <i class="fa-solid fa-wind" aria-hidden="true"></i>
+          <p class="highlight-card__label">Wind speed</p>
+          <p class="highlight-card__value" id="wind-value">--</p>
+        </li>
+
+        <li class="highlight-card highlight-card--sun">
+          <div class="sun-times">
+            <div class="sun-times__item">
+              <i class="fa-solid fa-sun" aria-hidden="true"></i>
+              <p class="highlight-card__label">Sunrise</p>
+              <p class="highlight-card__value" id="sunrise-value">--</p>
+            </div>
+            <div class="sun-times__item">
+              <i class="fa-regular fa-sun" aria-hidden="true"></i>
+              <p class="highlight-card__label">Sunset</p>
+              <p class="highlight-card__value" id="sunset-value">--</p>
+            </div>
+          </div>
+        </li>
+
+        <li class="highlight-card">
+          <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+          <p class="highlight-card__label">Cloud cover</p>
+          <p class="highlight-card__value" id="clouds-value">--</p>
+        </li>
+
+        <li class="highlight-card">
+          <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+          <p class="highlight-card__label">Pressure</p>
+          <p class="highlight-card__value" id="pressure-value">--</p>
+        </li>
+      </ul>
+
+      <h2 class="section-heading">This week</h2>
+      <ul class="forecast" aria-label="5-day forecast"></ul>
+    </main>
+  </div>
+
+  <template id="forecast-card-template">
+    <li class="forecast-card">
+      <p class="forecast-card__day"></p>
+      <img class="forecast-card__icon" src="" alt="" width="56" height="56" />
+      <p class="forecast-card__temps">
+        <span class="forecast-card__high"></span>
+        <span class="forecast-card__low"></span>
+      </p>
+    </li>
+  </template>
+</body>
+</html>
